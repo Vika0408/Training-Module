@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Module</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Training Module</h2>
+        <div class="progress-bar">
+            <div id="progress" style="width: 0%;"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="video-section">
+                {% if current_video %}
+                <h3>{{ current_video.title }}</h3>
+                <div id="video-container">
+                    <video id="training-video" controls poster="{{ url_for('static', filename='thumbnails/' + current_video.filepath.split('/')[-1].replace('.mp4', '.jpg')) }}">
+                    <source src="{{ url_for('static', filename='videos/' + current_video.filepath.split('/')[-1]) }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                    </video>
+                </div>
+                {% else %}
+                <h3>{{ videos[0].title }}</h3>
+                <div id="video-container">
+                    <video id="training-video" controls>
+                        <source src="{{ url_for('static', filename=videos[0].filepath.split('/')[-1]) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                {% endif %}
+
+                <button id="next-video" disabled>Next Video</button>
+            </div>
+
+            <div class="video-list-section">
+                <div class="video-list">
+                    {% for video in videos %}
+                    <div class="video-list-item">
+                        <h3>{{ video.title }}</h3>
+                        <a href="{{ url_for('play_video', video_id=video.id) }}">Play</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='video.js') }}"></script>
+</body>
+</html>
